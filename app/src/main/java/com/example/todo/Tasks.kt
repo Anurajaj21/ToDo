@@ -1,5 +1,6 @@
 package com.example.todo
 
+import android.content.Intent
 import android.graphics.Canvas
 import android.graphics.Color
 import android.os.Bundle
@@ -7,11 +8,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FirebaseAuth
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
 import kotlinx.android.synthetic.main.fragment_tasks.*
 
@@ -21,13 +24,23 @@ class Tasks : Fragment() {
     private lateinit var viewModel: TasksViewModel
     private val adapter = TaskAdapter(this@Tasks)
     private var deletedTask : Task? = null
+    private lateinit var auth: FirebaseAuth
+    private lateinit var bt_logout : Button
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
         viewModel = ViewModelProvider(this).get(TasksViewModel::class.java)
-        return inflater.inflate(R.layout.fragment_tasks, container, false)
+        auth = FirebaseAuth.getInstance()
+        val view = inflater.inflate(R.layout.fragment_tasks, container, false)
+        bt_logout = view.findViewById(R.id.logout)
+        bt_logout.setOnClickListener {
+            FirebaseAuth.getInstance().signOut()
+            startActivity(Intent(requireContext(), Login::class.java))
+            activity?.finish()
+        }
+        return view
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

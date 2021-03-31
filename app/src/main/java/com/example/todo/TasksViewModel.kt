@@ -3,6 +3,8 @@ package com.example.todo
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.google.firebase.FirebaseApp
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import java.lang.Exception
 
@@ -26,33 +28,44 @@ class TasksViewModel: ViewModel() {
 
     val temp = Tasks()
     val adapter = TaskAdapter(temp)
-    private val dbTasks = FirebaseDatabase.getInstance().getReference("TASK_ NODE")
+
+
+    private val auth : FirebaseAuth = FirebaseAuth.getInstance()
+    private val currenUser = auth.currentUser
+    private val userId = currenUser?.uid
+    private val dbTasks = userId?.let { FirebaseDatabase.getInstance().reference.child("TASK_NODES").child(it) }
     fun addTask(task: Task){
 
-        task.id = dbTasks.push().key
+        if (dbTasks != null) {
+            task.id = dbTasks.push().key
+        }
 
-        dbTasks.child(task.id!!).setValue(task)
-            .addOnCompleteListener{
-                if(it.isSuccessful)
-                    _result.value = null
-                else
-                    _result.value = it.exception
+        if (dbTasks != null) {
+            dbTasks.child(task.id!!).setValue(task)
+                    .addOnCompleteListener{
+                        if(it.isSuccessful)
+                            _result.value = null
+                        else
+                            _result.value = it.exception
 
 
-            }
+                    }
+        }
         adapter.notifyDataSetChanged()
     }
 
     fun readdTask(task: Task){
-        dbTasks.child(task.id!!).setValue(task)
-            .addOnCompleteListener{
-                if(it.isSuccessful)
-                    _result.value = null
-                else
-                    _result.value = it.exception
+        if (dbTasks != null) {
+            dbTasks.child(task.id!!).setValue(task)
+                    .addOnCompleteListener{
+                        if(it.isSuccessful)
+                            _result.value = null
+                        else
+                            _result.value = it.exception
 
 
-            }
+                    }
+        }
     }
 
     private val childEventListener = object  : ChildEventListener{
@@ -85,42 +98,48 @@ class TasksViewModel: ViewModel() {
     }
 
     fun getRealTimeUptades(){
-        dbTasks.addChildEventListener(childEventListener)
+        if (dbTasks != null) {
+            dbTasks.addChildEventListener(childEventListener)
+        }
     }
     fun fetchTasks(){
-        dbTasks.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                if (snapshot.exists()) {
-                    val tasks = mutableListOf<Task>()
-                    for (taskSnapshot in snapshot.children) {
-                        val task = taskSnapshot.getValue(Task::class.java)
-                        task?.id = taskSnapshot.key
-                        task?.let { tasks.add(it) }
+        if (dbTasks != null) {
+            dbTasks.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.exists()) {
+                        val tasks = mutableListOf<Task>()
+                        for (taskSnapshot in snapshot.children) {
+                            val task = taskSnapshot.getValue(Task::class.java)
+                            task?.id = taskSnapshot.key
+                            task?.let { tasks.add(it) }
+                        }
+                        _show.value = true
+                        //tasks.reverse()
+                        _tasks.value = tasks
+                    }else{
+                        _show.value = false
                     }
-                    _show.value = true
-                    //tasks.reverse()
-                    _tasks.value = tasks
-                }else{
-                    _show.value = false
                 }
-            }
 
-            override fun onCancelled(error: DatabaseError) {
-            }
+                override fun onCancelled(error: DatabaseError) {
+                }
 
-        })
+            })
+        }
     }
 
     fun edit_task(task: Task){
 
-        dbTasks.child(task.id!!).setValue(task)
-            .addOnCompleteListener{
-                if(it.isSuccessful)
-                    _result.value = null
-                else
-                    _result.value = it.exception
+        if (dbTasks != null) {
+            dbTasks.child(task.id!!).setValue(task)
+                    .addOnCompleteListener{
+                        if(it.isSuccessful)
+                            _result.value = null
+                        else
+                            _result.value = it.exception
 
-            }
+                    }
+        }
     }
     fun get_Edit_Task(position: Int): Task?{
         return _tasks.value?.get(position)
@@ -129,21 +148,25 @@ class TasksViewModel: ViewModel() {
     fun delete_task(position: Int){
         val task = _tasks.value?.get(position)
         if (task != null) {
-            dbTasks.child(task.id!!).setValue(null)
-                .addOnCompleteListener{
-                    if(it.isSuccessful)
-                        _result.value = null
-                    else
-                        _result.value = it.exception
+            if (dbTasks != null) {
+                dbTasks.child(task.id!!).setValue(null)
+                        .addOnCompleteListener{
+                            if(it.isSuccessful)
+                                _result.value = null
+                            else
+                                _result.value = it.exception
 
 
-                }
+                        }
+            }
         }
     }
 
     override fun onCleared() {
         super.onCleared()
-        dbTasks.removeEventListener(childEventListener)
+        if (dbTasks != null) {
+            dbTasks.removeEventListener(childEventListener)
+        }
     }
 
 }
