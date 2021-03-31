@@ -68,6 +68,7 @@ class Login : AppCompatActivity() {
     if(user != null){
         startActivity(Intent(applicationContext, MainActivity::class.java))
         finish()
+        overridePendingTransition(R.anim.slide_in, R.anim.slide_out)
     }
 
     }
@@ -81,6 +82,7 @@ class Login : AppCompatActivity() {
                             val user = auth.currentUser
                         startActivity(Intent(applicationContext, MainActivity::class.java))
                         finish()
+                        overridePendingTransition(R.anim.slide_in, R.anim.slide_out)
 
 
                     } else {
