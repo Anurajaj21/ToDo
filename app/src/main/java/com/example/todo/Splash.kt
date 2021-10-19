@@ -26,7 +26,7 @@ class Splash : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
         val user : FirebaseUser? = auth.currentUser
 
-        left_right_anim = AnimationUtils.loadAnimation(this, R.anim.left_right_anim)
+        left_right_anim = AnimationUtils.loadAnimation(this, R.anim.slide_up_anim)
         fade_out = AnimationUtils.loadAnimation(this, R.anim.fade_out)
 
         app_name.animation = left_right_anim

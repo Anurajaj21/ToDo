@@ -4,8 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/todo_login"
+    android:background="@color/teal_200"
     tools:context=".Login">
+
+    <ImageView
+        android:layout_width="150dp"
+        android:layout_height="120dp"
+        android:src="@drawable/todo_logo"
+        android:layout_marginBottom="50dp"
+        app:layout_constraintBottom_toTopOf="@+id/sign_in_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <com.google.android.gms.common.SignInButton
         android:id="@+id/sign_in_button"
