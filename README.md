@@ -1,6 +1,6 @@
-<img src="https://github.com/Anurajaj21/ToDo/blob/master/app/src/main/res/drawable/todoIm3.png" width="400" height="75">
+<img src="https://github.com/Anurajaj21/ToDo/blob/master/app/src/main/res/drawable/todo_im3.png" width="400" height="75">
 <p align="center">
-<img src="https://github.com/Anurajaj21/ToDo/blob/d767257748561010766868a1b1bd5b0820110cd5/app/src/main/res/drawable/todoIm1.png" width="700">
+<img src="https://github.com/Anurajaj21/ToDo/blob/d767257748561010766868a1b1bd5b0820110cd5/app/src/main/res/drawable/todo_im1.png" width="700">
 
 #### Todo contain google sign in and allow user to add their daily tasks. It uses firebase database to handle all the data.
 
@@ -13,7 +13,7 @@
 ## 📷 Screen Shots
 
 <p align="center">
-<img src="https://github.com/Anurajaj21/ToDo/blob/d767257748561010766868a1b1bd5b0820110cd5/app/src/main/res/drawable/todoIm2.png" width="1000">
+<img src="https://github.com/Anurajaj21/ToDo/blob/d767257748561010766868a1b1bd5b0820110cd5/app/src/main/res/drawable/todo_im2.png" width="1000">
 
 
 ## If you liked the project don't forget to star 🌟 and fork 🍽 the project.
